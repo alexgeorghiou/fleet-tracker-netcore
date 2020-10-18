@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>FleetTracker.Infrastructure</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.32" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.32" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FleetTracker.Core\FleetTracker.Core.csproj" />
+  </ItemGroup>
+</Project>
