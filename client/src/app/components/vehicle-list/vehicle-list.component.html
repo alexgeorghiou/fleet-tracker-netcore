@@ -1,0 +1,22 @@
+<div class="search">
+  <input type="search" placeholder="Filter by name or plate" [(ngModel)]="filter" aria-label="Filter vehicles">
+</div>
+
+<ul class="list">
+  <li *ngFor="let v of visible; trackBy: trackById"
+      class="item"
+      [class.item--selected]="v.id === selectedId"
+      (click)="selected.emit(v.id)">
+    <span class="dot" [ngClass]="'dot--' + v.status.toLowerCase()" [title]="v.status"></span>
+    <div class="meta">
+      <div class="name">{{ v.name }} <small>{{ v.registrationPlate }}</small></div>
+      <div class="detail" *ngIf="v.lastPosition; else noFix">
+        <span [class.over]="isOverLimit(v)">{{ v.lastPosition.speedKph | number:'1.0-0' }} km/h</span>
+        &middot; {{ v.status }}
+        &middot; {{ v.lastPosition.timestampUtc | date:'HH:mm:ss' }}
+      </div>
+      <ng-template #noFix><div class="detail">No position yet</div></ng-template>
+    </div>
+    <span class="badge" *ngIf="v.openTripId" title="Trip in progress">trip</span>
+  </li>
+</ul>

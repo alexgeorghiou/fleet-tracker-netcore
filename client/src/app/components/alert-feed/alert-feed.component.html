@@ -1,0 +1,12 @@
+<p class="empty" *ngIf="!alerts.length">No open alerts.</p>
+
+<ul class="feed">
+  <li *ngFor="let a of alerts; trackBy: trackById" class="alert" [ngClass]="'alert--' + a.severity.toLowerCase()">
+    <span class="icon" aria-hidden="true">{{ iconFor(a) }}</span>
+    <div class="body" (click)="focusVehicle.emit(a.vehicleId)">
+      <div class="message">{{ a.message }}</div>
+      <div class="time">{{ a.raisedAtUtc | date:'HH:mm:ss' }} &middot; {{ a.type }}</div>
+    </div>
+    <button type="button" class="ack" (click)="acknowledge.emit(a)" title="Acknowledge">&#10003;</button>
+  </li>
+</ul>
