@@ -1,0 +1,26 @@
+<ng-container *ngIf="vehicle">
+  <header class="head">
+    <div>
+      <h3>{{ vehicle.name }}</h3>
+      <div class="sub">{{ vehicle.registrationPlate }} &middot; limit {{ vehicle.speedLimitKph }} km/h &middot; {{ vehicle.status }}</div>
+    </div>
+    <button type="button" class="close" (click)="closed.emit()" aria-label="Close">&times;</button>
+  </header>
+
+  <h4>Recent trips</h4>
+  <table class="trips" *ngIf="(trips$ | async) as trips">
+    <thead>
+      <tr><th>Started</th><th>Duration</th><th>Distance</th><th>Max</th><th>Ended by</th></tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let t of trips; trackBy: trackById" (click)="toggle(t)" [class.active]="t.id === activeTripId">
+        <td>{{ t.startedAtUtc | date:'MMM d, HH:mm' }}</td>
+        <td>{{ t.status === 'InProgress' ? 'in progress' : (t.durationMinutes | number:'1.0-0') + ' min' }}</td>
+        <td>{{ t.distanceKm | number:'1.1-1' }} km</td>
+        <td>{{ t.maxSpeedKph | number:'1.0-0' }} km/h</td>
+        <td>{{ t.endReason || '-' }}</td>
+      </tr>
+      <tr *ngIf="!trips.length"><td colspan="5" class="empty">No trips in the last 24 hours.</td></tr>
+    </tbody>
+  </table>
+</ng-container>
