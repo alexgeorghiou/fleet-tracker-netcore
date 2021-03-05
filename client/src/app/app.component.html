@@ -1,0 +1,60 @@
+<header class="topbar">
+  <div class="brand">
+    <svg viewBox="0 0 32 32" width="22" height="22" aria-hidden="true">
+      <circle cx="16" cy="16" r="14" fill="#1565c0"/><path d="M16 6l7 18-7-4-7 4z" fill="#fff"/>
+    </svg>
+    Fleet Tracker
+  </div>
+
+  <div class="stats" *ngIf="counts$ | async as c">
+    <span><b>{{ c.total }}</b> vehicles</span>
+    <span class="moving"><b>{{ c.moving }}</b> moving</span>
+    <span class="idle"><b>{{ c.idle }}</b> idle</span>
+    <span class="parked"><b>{{ c.parked }}</b> parked</span>
+  </div>
+
+  <div class="conn" [ngClass]="'conn--' + (connection$ | async)">
+    <span class="conn__dot"></span>{{ connection$ | async }}
+  </div>
+</header>
+
+<main class="layout">
+  <aside class="sidebar">
+    <section>
+      <h2>Vehicles</h2>
+      <ft-vehicle-list
+        [vehicles]="vehicles$ | async"
+        [selectedId]="selectedId$ | async"
+        (selected)="select($event)">
+      </ft-vehicle-list>
+    </section>
+
+    <section>
+      <h2>Alerts</h2>
+      <ft-alert-feed
+        [alerts]="alerts$ | async"
+        (acknowledge)="acknowledge($event)"
+        (focusVehicle)="select($event)">
+      </ft-alert-feed>
+    </section>
+  </aside>
+
+  <section class="map-area">
+    <ft-live-map
+      [vehicles]="vehicles$ | async"
+      [geofences]="geofences$ | async"
+      [selectedId]="selectedId$ | async"
+      [tripPath]="tripPath$ | async"
+      (vehicleSelected)="select($event)">
+    </ft-live-map>
+
+    <ft-trip-panel
+      class="trip-panel"
+      *ngIf="selected$ | async as vehicle"
+      [vehicle]="vehicle"
+      [activeTripId]="activeTripId$ | async"
+      (tripSelected)="activeTripId$.next($event)"
+      (closed)="select(null)">
+    </ft-trip-panel>
+  </section>
+</main>
