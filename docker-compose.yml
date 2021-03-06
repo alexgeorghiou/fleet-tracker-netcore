@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  fleet:
+    build: .
+    image: fleet-tracker:local
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      Simulator__Enabled: "true"
+      Cors__Origins__0: "http://localhost:8080"
+      # Ingestion__DeviceApiKey: "change-me"
+    volumes:
+      - fleet-data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/health || exit 1"]
+      interval: 15s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  fleet-data:
