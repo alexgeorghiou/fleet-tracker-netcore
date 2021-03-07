@@ -44,7 +44,10 @@ namespace FleetTracker.Core.Domain
 
         public int PingCount { get; set; }
 
-        public TimeSpan Duration => (EndedAtUtc ?? StartedAtUtc) - StartedAtUtc;
+        /// <summary>Timestamp of the latest ping applied to this trip; gives in-progress trips a live duration.</summary>
+        public DateTime LastPingAtUtc { get; set; }
+
+        public TimeSpan Duration => (EndedAtUtc ?? LastPingAtUtc) - StartedAtUtc;
 
         /// <summary>Average speed over the trip in km/h, or zero for trips with no elapsed time.</summary>
         public double AverageSpeedKph =>

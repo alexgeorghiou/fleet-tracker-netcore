@@ -58,6 +58,17 @@ namespace FleetTracker.Tests.Tracking
         }
 
         [Fact]
+        public void In_progress_trip_reports_live_duration()
+        {
+            Feed(_pings.At(TimeSpan.Zero, 40));
+            var result = Feed(_pings.At(TimeSpan.FromMinutes(4), 40));
+
+            Assert.Equal(TripStatus.InProgress, result.CurrentTrip.Status);
+            Assert.Equal(TimeSpan.FromMinutes(4), result.CurrentTrip.Duration);
+            Assert.True(result.CurrentTrip.AverageSpeedKph > 0);
+        }
+
+        [Fact]
         public void Signal_gap_yields_two_trips()
         {
             var first = Feed(_pings.At(TimeSpan.Zero, 40)).OpenedTrip;

@@ -74,7 +74,10 @@ namespace FleetTracker.Core.Tracking
                 openTrip.EndLatitude = decision.EndLatitude;
                 openTrip.EndLongitude = decision.EndLongitude;
                 if (decision.EndReason == TripEndReason.IgnitionOff)
+                {
                     openTrip.PingCount++;
+                    openTrip.LastPingAtUtc = ping.TimestampUtc;
+                }
 
                 result.ClosedTrip = openTrip;
                 state.OpenTripId = null;
@@ -91,7 +94,8 @@ namespace FleetTracker.Core.Tracking
                     StartLatitude = ping.Latitude,
                     StartLongitude = ping.Longitude,
                     MaxSpeedKph = ping.SpeedKph,
-                    PingCount = 1
+                    PingCount = 1,
+                    LastPingAtUtc = ping.TimestampUtc
                 };
                 state.OpenTripId = openTrip.Id;
                 result.OpenedTrip = openTrip;
@@ -101,6 +105,7 @@ namespace FleetTracker.Core.Tracking
                 openTrip.DistanceMeters += decision.DistanceDeltaMeters;
                 openTrip.MaxSpeedKph = Math.Max(openTrip.MaxSpeedKph, ping.SpeedKph);
                 openTrip.PingCount++;
+                openTrip.LastPingAtUtc = ping.TimestampUtc;
             }
 
             result.CurrentTrip = openTrip;
