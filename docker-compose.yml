@@ -13,11 +13,6 @@ services:
       # Ingestion__DeviceApiKey: "change-me"
     volumes:
       - fleet-data:/data
-    healthcheck:
-      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/health || exit 1"]
-      interval: 15s
-      timeout: 3s
-      retries: 5
 
 volumes:
   fleet-data:
