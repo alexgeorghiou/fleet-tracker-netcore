@@ -1,0 +1,57 @@
+### Sample requests (VS Code REST Client / JetBrains HTTP client)
+@base = http://localhost:5000
+
+### List vehicles with live status
+GET {{base}}/api/vehicles
+
+### Report a ping as a device
+POST {{base}}/api/pings
+Content-Type: application/json
+# X-Device-Key: change-me
+
+{
+  "deviceId": "dev-van-01",
+  "timestampUtc": "2026-01-01T09:00:00Z",
+  "latitude": 52.3740,
+  "longitude": 4.8930,
+  "speedKph": 38.5,
+  "headingDegrees": 120,
+  "ignitionOn": true
+}
+
+### Upload a buffered burst
+POST {{base}}/api/pings/batch
+Content-Type: application/json
+
+{
+  "pings": [
+    { "deviceId": "dev-van-02", "timestampUtc": "2026-01-01T09:00:00Z", "latitude": 52.35, "longitude": 4.85, "speedKph": 40 },
+    { "deviceId": "dev-van-02", "timestampUtc": "2026-01-01T09:00:30Z", "latitude": 52.35, "longitude": 4.855, "speedKph": 42 }
+  ]
+}
+
+### Draw a geofence
+POST {{base}}/api/geofences
+Content-Type: application/json
+
+{
+  "name": "Fuel station",
+  "color": "#6a1b9a",
+  "alertOnEnter": true,
+  "alertOnExit": false,
+  "vertices": [
+    { "lat": 52.3600, "lng": 4.8400 },
+    { "lat": 52.3600, "lng": 4.8450 },
+    { "lat": 52.3570, "lng": 4.8450 },
+    { "lat": 52.3570, "lng": 4.8400 }
+  ]
+}
+
+### Which fences contain a point?
+GET {{base}}/api/geofences/containing?lat=52.37&lng=4.89
+
+### Open alerts
+GET {{base}}/api/alerts?unacknowledgedOnly=true
+
+### Trips in the last 24h
+GET {{base}}/api/trips
